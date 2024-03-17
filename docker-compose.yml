@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: filmlibrary
+    ports:
+      - "6432:5432"
+  
+  film-library-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MIGRATION_DIR=./migrations 
+    ports:
+      - "10011:10011"
+    depends_on:
+      - postgres
+    environment:
+      SERVER_PORT: "0.0.0.0:10011"
+      POSTGRES_URL: "postgresql://postgres:testpassword@postgres:5432/filmlibrary?sslmode=disable"
+    volumes:
+      - ./migrations:/app/migrations
