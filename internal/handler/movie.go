@@ -36,6 +36,8 @@ func NewMovieHandler(movieService service.MovieService) *MovieHandler {
 // @Failure 500 {string} string "Failed to create movie"
 // @Router /movies/create [post]
 func (mh *MovieHandler) Create(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Create Movie request...")
+
 	var movie model.Movie
 	if err := json.NewDecoder(r.Body).Decode(&movie); err != nil {
 		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
@@ -50,6 +52,8 @@ func (mh *MovieHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Create Movie request handled successfully.")
 }
 
 // Update handles the HTTP request to update an existing movie.
@@ -65,6 +69,8 @@ func (mh *MovieHandler) Create(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 {string} string "Failed to update movie"
 // @Router /movies/update [put]
 func (mh *MovieHandler) Update(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Update Movie request...")
+
 	movieIDStr := r.URL.Query().Get("movie_id")
 	movieID, err := uuid.Parse(movieIDStr)
 	if err != nil {
@@ -87,6 +93,8 @@ func (mh *MovieHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Update Movie request handled successfully.")
 }
 
 // Delete handles the HTTP request to delete an existing movie.
@@ -101,6 +109,8 @@ func (mh *MovieHandler) Update(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 {string} string "Failed to delete movie"
 // @Router /movies/delete [delete]
 func (mh *MovieHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Delete Movie request...")
+
 	movieIDStr := r.URL.Query().Get("movie_id")
 	movieID, err := uuid.Parse(movieIDStr)
 	if err != nil {
@@ -116,6 +126,8 @@ func (mh *MovieHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Delete Movie request handled successfully.")
 }
 
 // GetAllWithSorting handles the HTTP request to retrieve all movies with sorting.
@@ -130,6 +142,8 @@ func (mh *MovieHandler) Delete(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 {string} string "Failed to fetch movies with sorting"
 // @Router /movies/getAllWithSorting [get]
 func (mh *MovieHandler) GetAllWithSorting(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling GetAllWithSorting Movies request...")
+
 	flagStr := r.URL.Query().Get("flag")
 	flag, err := strconv.Atoi(flagStr)
 	if err != nil {
@@ -155,6 +169,8 @@ func (mh *MovieHandler) GetAllWithSorting(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
+
+	log.Println("GetAllWithSorting Movies request handled successfully.")
 }
 
 // GetByTitleFragment handles the HTTP request to retrieve movies by title fragment.
@@ -168,6 +184,8 @@ func (mh *MovieHandler) GetAllWithSorting(w http.ResponseWriter, r *http.Request
 // @Failure 500 {string} string "Failed to fetch movies by title fragment"
 // @Router /movies/getByTitleFragment [get]
 func (mh *MovieHandler) GetByTitleFragment(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling GetByTitleFragment Movie request...")
+
 	titleFragment := r.URL.Query().Get("title_fragment")
 
 	movies, err := mh.movieService.GetByTitleFragment(titleFragment)
@@ -187,6 +205,8 @@ func (mh *MovieHandler) GetByTitleFragment(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
+
+	log.Printf("GetByTitleFragment Movie request handled successfully.")
 }
 
 // GetByActorNameFragment handles the HTTP request to retrieve movies by actor name fragment.
@@ -200,6 +220,8 @@ func (mh *MovieHandler) GetByTitleFragment(w http.ResponseWriter, r *http.Reques
 // @Failure 500 {string} string "Failed to fetch movies by actor name fragment"
 // @Router /movies/getByActorNameFragment [get]
 func (mh *MovieHandler) GetByActorNameFragment(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling GetByActorNameFragment Movie request...")
+
 	actorNameFragment := r.URL.Query().Get("actor_name_fragment")
 
 	movies, err := mh.movieService.GetByActorNameFragment(actorNameFragment)
@@ -219,4 +241,6 @@ func (mh *MovieHandler) GetByActorNameFragment(w http.ResponseWriter, r *http.Re
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
+
+	log.Printf("GetByActorNameFragment Movie request handled successfully.")
 }

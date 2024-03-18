@@ -40,6 +40,8 @@ func NewUserHandler(userService service.UserService) *UserHandler {
 // @Failure 500 {string} string "Failed to create user"
 // @Router /register [post]
 func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Register User request...")
+
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
@@ -67,6 +69,8 @@ func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+
+	log.Printf("Register User request handled successfully.")
 }
 
 // Login handles the HTTP request for user login.
@@ -80,6 +84,8 @@ func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 // @Failure 401 {string} string "Unauthorized"
 // @Router /login [post]
 func (uh *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Login User request...")
+
 	var user model.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
@@ -106,4 +112,6 @@ func (uh *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "JWT token signing", http.StatusInternalServerError)
 	}
 	json.NewEncoder(w).Encode(map[string]string{"token": t})
+
+	log.Printf("Login User request handled successfully.")
 }
