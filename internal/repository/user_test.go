@@ -3,10 +3,11 @@ package repository
 import (
 	"testing"
 
-	"github.com/EgMeln/filmLibraryPrivate/internal/model"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/bcrypt"
+	
+	"github.com/EgMeln/filmLibraryPrivate/internal/model"
 )
 
 func TestUserManager_Create(t *testing.T) {
@@ -22,7 +23,6 @@ func TestUserManager_Create(t *testing.T) {
 		ID:       uuid.New(),
 		Username: "admin",
 		Password: string(password),
-		Role:     "Ken",
 	})
 	require.NoError(t, err)
 }
@@ -57,12 +57,11 @@ func TestUserManager_GetByName(t *testing.T) {
 	password, err := bcrypt.GenerateFromPassword([]byte("admin"), 10)
 	require.NoError(t, err)
 	user := &model.User{
-		ID:  uuid.New(),
+		ID:       uuid.New(),
 		Username: "admin",
 		Password: string(password),
-		Role:     "Ken",
+		Role:     "user",
 	}
-	user.ID = uuid.New()
 	err = userRep.Create(user)
 	require.NoError(t, err)
 

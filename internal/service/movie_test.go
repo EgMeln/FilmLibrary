@@ -87,10 +87,8 @@ func TestMovieService_Create(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
-
+			ms := NewMovieService(mockManager)
+			
 			err := ms.Create(tt.movie)
 
 			if err != nil && err.Error() != tt.expectedResult.Error() {
@@ -136,6 +134,11 @@ func TestMovieService_Update(t *testing.T) {
 				Description: "Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land.",
 				ReleaseDate: time.Date(2024, time.July, 16, 0, 0, 0, 0, time.UTC),
 				Rating:      8,
+				Actors: []model.Actor{
+					{
+						Name: "Tom Hanks",
+					},
+				},
 			},
 			expectedResult: nil,
 		},
@@ -155,9 +158,7 @@ func TestMovieService_Update(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
+			ms := NewMovieService(mockManager)
 
 			err := ms.Update(tt.movieID, tt.movie)
 
@@ -191,9 +192,7 @@ func TestMovieService_Delete(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
+			ms := NewMovieService(mockManager)
 
 			err := ms.Delete(tt.movieID)
 
@@ -240,7 +239,7 @@ func TestMovieService_GetAllWithSorting(t *testing.T) {
 		},
 		{
 			name:           "SortingByReleaseDate",
-			flag:           SortingReleaseDate,
+			flag:           SortingByReleaseDate,
 			expectedResult: []*model.Movie{{Title: "Movie1", ReleaseDate: time.Date(2024, time.July, 16, 0, 0, 0, 0, time.UTC)}, {Title: "Movie2", ReleaseDate: time.Date(2023, time.July, 16, 0, 0, 0, 0, time.UTC)}},
 		},
 		{
@@ -251,9 +250,7 @@ func TestMovieService_GetAllWithSorting(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
+			ms := NewMovieService(mockManager)
 
 			movies, err := ms.GetAllWithSorting(tt.flag)
 
@@ -300,9 +297,7 @@ func TestMovieService_GetByTitleFragment(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
+			ms := NewMovieService(mockManager)
 
 			movies, err := ms.GetByTitleFragment(tt.titleFragment)
 
@@ -348,9 +343,7 @@ func TestMovieService_GetByActorNameFragment(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &movieService{
-				movieManager: mockManager,
-			}
+			ms := NewMovieService(mockManager)
 
 			movies, err := ms.GetByActorNameFragment(tt.actorNameFragment)
 

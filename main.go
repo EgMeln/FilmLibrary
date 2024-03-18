@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 
@@ -15,6 +16,12 @@ import (
 )
 
 func main() {
+	file, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	log.SetOutput(file)
+
 	cfg, err := config.NewConfig()
 	if err != nil {
 		log.Fatalf("Unable to parse env: %v", err)
@@ -40,17 +47,17 @@ func main() {
 	http.HandleFunc("/register", userHandler.Register)
 	http.HandleFunc("/login", userHandler.Login)
 
-	http.HandleFunc("/actors/create", middleware.AuthMiddleware(actorHandler.Create))
-	http.HandleFunc("/actors/update", middleware.AuthMiddleware(actorHandler.Update))
-	http.HandleFunc("/actors/delete", middleware.AuthMiddleware(actorHandler.Delete))
-	http.HandleFunc("/actors/getAllWithMovies", actorHandler.GetAllWithMovies)
+	http.HandleFunc("/actors/create", middleware.AuthAdminMiddleware(actorHandler.Create))
+	http.HandleFunc("/actors/update", middleware.AuthAdminMiddleware(actorHandler.Update))
+	http.HandleFunc("/actors/delete", middleware.AuthAdminMiddleware(actorHandler.Delete))
+	http.HandleFunc("/actors/getAllWithMovies", middleware.AuthUserMiddleware(actorHandler.GetAllWithMovies))
 
-	http.HandleFunc("/movies/create", middleware.AuthMiddleware(movieHandler.Create))
-	http.HandleFunc("/movies/update", middleware.AuthMiddleware(movieHandler.Update))
-	http.HandleFunc("/movies/delete", middleware.AuthMiddleware(movieHandler.Delete))
-	http.HandleFunc("/movies/getAllWithSorting", movieHandler.GetAllWithSorting)
-	http.HandleFunc("/movies/getByTitleFragment", movieHandler.GetByTitleFragment)
-	http.HandleFunc("/movies/getByActorNameFragment", movieHandler.GetByActorNameFragment)
+	http.HandleFunc("/movies/create", middleware.AuthAdminMiddleware(movieHandler.Create))
+	http.HandleFunc("/movies/update", middleware.AuthAdminMiddleware(movieHandler.Update))
+	http.HandleFunc("/movies/delete", middleware.AuthAdminMiddleware(movieHandler.Delete))
+	http.HandleFunc("/movies/getAllWithSorting", middleware.AuthUserMiddleware(movieHandler.GetAllWithSorting))
+	http.HandleFunc("/movies/getByTitleFragment", middleware.AuthUserMiddleware(movieHandler.GetByTitleFragment))
+	http.HandleFunc("/movies/getByActorNameFragment", middleware.AuthUserMiddleware(movieHandler.GetByActorNameFragment))
 
 	log.Printf("Server is running on %s", cfg.ServerPort)
 	log.Fatal(http.ListenAndServe(cfg.ServerPort, nil))

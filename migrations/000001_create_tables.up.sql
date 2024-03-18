@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS users (
     id        UUID PRIMARY KEY,
     username  VARCHAR(30) NOT NULL,
     password  VARCHAR(150) NOT NULL,
-    role      VARCHAR(10)
+    role      VARCHAR(10) DEFAULT 'user'
 );

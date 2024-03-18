@@ -9,8 +9,8 @@ import (
 
 // Sorting options for movies.
 const (
-	SortingByTitle     = 1
-	SortingReleaseDate = 2
+	SortingByTitle       = 1
+	SortingByReleaseDate = 2
 )
 
 // MovieService represents a service for managing movies.
@@ -78,7 +78,7 @@ func (ms *movieService) GetAllWithSorting(flag int) ([]*model.Movie, error) {
 	switch flag {
 	case SortingByTitle:
 		movies, err = ms.movieManager.GetByTitle()
-	case SortingReleaseDate:
+	case SortingByReleaseDate:
 		movies, err = ms.movieManager.GetByReleaseDate()
 	default:
 		movies, err = ms.movieManager.GetByRatingDesc()

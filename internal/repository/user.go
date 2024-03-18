@@ -27,9 +27,9 @@ type userManager struct {
 
 // Create inserts a new user record into the database.
 func (um *userManager) Create(user *model.User) error {
-	query := "INSERT INTO users (id, username, password, role) VALUES ($1, $2, $3, $4)"
+	query := "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)"
 
-	_, err := um.db.Exec(query, user.ID, user.Username, user.Password, user.Role)
+	_, err := um.db.Exec(query, user.ID, user.Username, user.Password)
 	if err != nil {
 		return err
 	}

@@ -25,3 +25,18 @@ The API provides the following endpoints:
 - **GET /movies/getByActorNameFragment:** Retrieve movies associated with actors whose name matches the provided fragment.
 
 For detailed information about the request and response formats, please refer to the Swagger documentation.
+
+## Code Coverage
+
+The following table provides a summary of code coverage for the Film Library API project:
+
+| Package                                                     | Coverage   |
+|-------------------------------------------------------------|------------|
+| github.com/EgMeln/filmLibraryPrivate/docs                   | 0.0%       |
+| github.com/EgMeln/filmLibraryPrivate                        | 0.0%       |
+| github.com/EgMeln/filmLibraryPrivate/internal/config        | 75.0%      |
+| github.com/EgMeln/filmLibraryPrivate/internal/handler       | 73.1%      |
+| github.com/EgMeln/filmLibraryPrivate/internal/middleware    | 71.4%      |
+| github.com/EgMeln/filmLibraryPrivate/internal/repository    | 81.4%      |
+| github.com/EgMeln/filmLibraryPrivate/internal/service       | 95.9%      |
+| **Total**                                                   | **74.3%**  |

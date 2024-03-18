@@ -93,8 +93,9 @@ func (uh *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	payload := jwt.MapClaims{
-		"sub": user.Username,
-		"exp": time.Now().Add(time.Hour * 72).Unix(),
+		"role": user.Role,
+		"sub":  user.Username,
+		"exp":  time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)

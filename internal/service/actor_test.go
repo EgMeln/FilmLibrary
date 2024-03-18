@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -78,10 +79,8 @@ func TestActorService_Create(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actorSvc := &actorService{
-				actorManager: mockManager,
-			}
-
+			actorSvc := NewActorService(mockManager)
+		
 			err := actorSvc.Create(tt.actor)
 
 			if err != nil && err.Error() != tt.expectedResult.Error() {
@@ -131,7 +130,9 @@ func TestActorService_Update(t *testing.T) {
 			name:    "Success",
 			actorID: successActorID,
 			actor: &model.Actor{
-				Name: "Tom Hardy",
+				Name:      "Tom Hardy",
+				Gender:    "Male",
+				BirthDate: time.Date(2022, 0, 0, 0, 0, 0, 0, time.UTC),
 			},
 			expectedResult: nil,
 		},
@@ -147,9 +148,7 @@ func TestActorService_Update(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actorSvc := &actorService{
-				actorManager: mockManager,
-			}
+			actorSvc := NewActorService(mockManager)
 
 			err := actorSvc.Update(tt.actorID, tt.actor)
 
@@ -202,9 +201,7 @@ func TestActorService_Delete(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actorSvc := &actorService{
-				actorManager: mockManager,
-			}
+			actorSvc := NewActorService(mockManager)
 
 			err := actorSvc.Delete(tt.actorID)
 
@@ -254,9 +251,7 @@ func TestActorService_GetAllWithMovies(t *testing.T) {
 		},
 	}
 
-	actorSvc := &actorService{
-		actorManager: mockManager,
-	}
+	actorSvc := NewActorService(mockManager)
 
 	expectedActors := []*model.ActorMovies{
 
