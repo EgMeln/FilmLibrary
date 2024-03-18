@@ -36,6 +36,8 @@ func NewActorHandler(actorService service.ActorService) *ActorHandler {
 //	@Failure		500		{string}	string		"Failed to create actor"
 //	@Router			/actors/create [post]
 func (ah *ActorHandler) Create(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Create Actor request...")
+
 	var actor model.Actor
 	if err := json.NewDecoder(r.Body).Decode(&actor); err != nil {
 		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
@@ -49,6 +51,8 @@ func (ah *ActorHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Create Actor request handled successfully.")
 }
 
 // Update handles HTTP requests to update an existing actor.
@@ -65,6 +69,8 @@ func (ah *ActorHandler) Create(w http.ResponseWriter, r *http.Request) {
 //	@Failure		500			{string}	string		"Failed to update actor"
 //	@Router			/actors/update [put]
 func (ah *ActorHandler) Update(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Update Actor request...")
+
 	actorIDStr := r.URL.Query().Get("actor_id")
 	actorID, err := uuid.Parse(actorIDStr)
 	if err != nil {
@@ -87,6 +93,8 @@ func (ah *ActorHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Update Actor request handled successfully.")
 }
 
 // Delete handles HTTP requests to delete an actor by ID.
@@ -101,6 +109,8 @@ func (ah *ActorHandler) Update(w http.ResponseWriter, r *http.Request) {
 //	@Failure		500			{string}	string	"Failed to delete actor"
 //	@Router			/actors/delete [delete]
 func (ah *ActorHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling Delete Actor request...")
+
 	actorIDStr := r.URL.Query().Get("actor_id")
 	actorID, err := uuid.Parse(actorIDStr)
 	if err != nil {
@@ -116,6 +126,8 @@ func (ah *ActorHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	log.Printf("Delete Actor request handled successfully.")
 }
 
 // GetAllWithMovies handles HTTP requests to retrieve all actors with their associated movies.
@@ -128,6 +140,8 @@ func (ah *ActorHandler) Delete(w http.ResponseWriter, r *http.Request) {
 //	@Failure		500	{string}	string				"Failed to fetch actors with movies"
 //	@Router			/actors/getAllWithMovies [get]
 func (ah *ActorHandler) GetAllWithMovies(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Handling GetAllWithMovies Actors request...")
+
 	actorMovies, err := ah.actorService.GetAllWithMovies()
 	if err != nil {
 		http.Error(w, "Failed to fetch actors with movies", http.StatusInternalServerError)
@@ -145,4 +159,6 @@ func (ah *ActorHandler) GetAllWithMovies(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
+
+	log.Printf("GetAllWithMovies Actors request handled successfully.")
 }
